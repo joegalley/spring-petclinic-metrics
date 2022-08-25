@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<<<<<<< HEAD
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-=======
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
->>>>>>> 3f8468432d86dcbd0cf4372e93e06d2f47aed26a
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.springframework.samples</groupId>
   <artifactId>spring-petclinic</artifactId>
@@ -33,12 +29,9 @@
     <nohttp-checkstyle.version>0.0.10</nohttp-checkstyle.version>
     <spring-format.version>0.0.31</spring-format.version>
 
-<<<<<<< HEAD
     <jacoco.version>0.8.5</jacoco.version>
     <!-- <nohttp-checkstyle.version>0.0.4.RELEASE</nohttp-checkstyle.version> -->
     <spring-format.version>0.0.25</spring-format.version>
-=======
->>>>>>> 3f8468432d86dcbd0cf4372e93e06d2f47aed26a
   </properties>
 
   <dependencies>
@@ -71,15 +64,12 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
-<<<<<<< HEAD
       <exclusions>
         <exclusion>
           <groupId>org.junit.vintage</groupId>
           <artifactId>junit-vintage-engine</artifactId>
         </exclusion>
       </exclusions>
-=======
->>>>>>> 3f8468432d86dcbd0cf4372e93e06d2f47aed26a
     </dependency>
 
     <!-- Databases - Uses H2 by default -->
