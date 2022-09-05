@@ -1,23 +1,15 @@
-version: "2.2"
-
+version: '2.2'
 services:
-  mysql:
-    image: mysql:5.7
+  spring-petclinic-metrics:
+    container_name: spring-petclinic-metrics
+    build:
+      dockerfile: Dockerfile
+    image: spring-petclinic-metrics
     ports:
-      - "3306:3306"
+      - 8777:8080
     environment:
       - MYSQL_ROOT_PASSWORD=
       - MYSQL_ALLOW_EMPTY_PASSWORD=true
       - MYSQL_USER=petclinic
       - MYSQL_PASSWORD=petclinic
       - MYSQL_DATABASE=petclinic
-    volumes:
-      - "./conf.d:/etc/mysql/conf.d:ro"
-  postgres:
-    image: postgres:14.1
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_PASSWORD=petclinic
-      - POSTGRES_USER=petclinic
-      - POSTGRES_DB=petclinic
