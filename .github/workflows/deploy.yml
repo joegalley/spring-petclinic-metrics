@@ -27,6 +27,7 @@ jobs:
           path: build/libs/spring-petclinic-*.jar
   deploy:
     name: Deploy to Elastic Beanstalk
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Download JAR
