@@ -23,5 +23,24 @@ jobs:
       - name: Upload JAR
         uses: actions/upload-artifact@v2
         with:
-          name: artifact
+          name: build_artifact # Creates a zip file called "build_artifact" which holds just our JAR file
           path: build/libs/spring-petclinic-*.jar
+  deploy:
+    name: Deploy to Elastic Beanstalk
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download JAR
+        uses: actions/download-artifact@v2
+        with:
+          name: build_artifact # Pulls the artifact (containing the JAR file) from the "build" step
+      - name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v13
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }} # Referenced from GitHub Secrets
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }} # Referenced from GitHub Secrets
+          use_existing_version_if_available: true
+          application_name: spring-petclinic-metrics-eb-app # Already set externally in the observability-demo repo
+          environment_name: spring-petclinic-metrics-eb-env # Already set externally in the observability-demo repo
+          version_label: ${{github.SHA}}
+          region: us-east-1
+          deployment_package: spring-petclinic-*.jar # JAR file which was generated in the build step and zipped up
