@@ -20,5 +20,3 @@ _site/
 .idea/*
 .editorconfig
 .gitpod
-docker-compose
-gradlew
