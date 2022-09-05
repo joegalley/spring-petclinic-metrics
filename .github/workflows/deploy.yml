@@ -16,7 +16,9 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: '11'
-      - name: Build with Gradle
+      - name: Upgrade Gradle permissions
+        run: chmod +x ./gradlew
+      - name: Build JAR file with Gradle
         run: ./gradlew bootJar
       - name: Upload JAR
         uses: actions/upload-artifact@v2
