@@ -20,6 +20,8 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -44,6 +46,8 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 class OwnerController {
 
+	private final Logger logger = LogManager.getLogger(OwnerController.class);
+
 	private static final String VIEWS_OWNER_CREATE_OR_UPDATE_FORM = "owners/createOrUpdateOwnerForm";
 
 	private final OwnerRepository owners;
@@ -59,6 +63,7 @@ class OwnerController {
 
 	@ModelAttribute("owner")
 	public Owner findOwner(@PathVariable(name = "ownerId", required = false) Integer ownerId) {
+		logger.info("Looking up owner ID '{}'", ownerId);
 		return ownerId == null ? new Owner() : this.owners.findById(ownerId);
 	}
 
