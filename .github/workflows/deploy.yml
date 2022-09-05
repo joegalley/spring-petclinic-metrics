@@ -43,4 +43,4 @@ jobs:
           environment_name: spring-petclinic-metrics-eb-env # Already set externally in the observability-demo repo
           version_label: ${{github.SHA}}
           region: us-east-1
-          deployment_package: spring-petclinic-*.jar # JAR file which was generated in the build step and zipped up
+          deployment_package: spring-petclinic-2.6.0.jar # JAR file which was generated in the build step and zipped up
