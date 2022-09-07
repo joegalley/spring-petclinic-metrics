@@ -7,15 +7,18 @@ on:
     branches:
       - main
 jobs:
-  build:
-    name: Build
-    runs-on: ubuntu-latest
+  ci:
+    name: "CI"
+    runs-on: "ubuntu-latest"
     steps:
-      - uses: actions/checkout@v1
+      - name: "Checkout Code"
+        uses: "actions/checkout@v2"
       - name: Set up JDK
         uses: actions/setup-java@v1
         with:
           java-version: '11'
+      - name: "Lint code"
+        run: echo "Linting repository"
       - name: Upgrade Gradle permissions
         run: chmod +x ./gradlew
       - name: Build JAR file with Gradle
@@ -25,23 +28,60 @@ jobs:
         with:
           name: build_artifact # Creates a zip file called "build_artifact" which holds just our JAR file
           path: build/libs/spring-petclinic-*.jar
-  deploy:
-    name: Deploy to Elastic Beanstalk
-    needs: build
-    runs-on: ubuntu-latest
+      - name: "Run unit tests"
+        run: echo "Running unit tests"
+     path: build/libs/spring-petclinic-*.jar
+  cd:
+    name: "Deployment"
+    runs-on: "ubuntu-latest"
+    needs:
+      - ci
     steps:
-      - name: Download JAR
-        uses: actions/download-artifact@v2
+      - name: "Checkout Code"
+        uses: "actions/checkout@v2"
+
+      - name: Set tag
+        id: vars
+        run: echo "::set-output name=tag::${GITHUB_REF#refs/*/}"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          name: build_artifact # Pulls the artifact (containing the JAR file) from the "build" step
-      - name: Deploy to EB
-        uses: einaregilsson/beanstalk-deploy@v13
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: "us-east-1"
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: "test-ecr-repository"
+          IMAGE_TAG: ${{ steps.vars.outputs.tag }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
+      - name: Download task definition
+        run: |
+          aws ecs describe-task-definition --task-definition service --query taskDefinition > task-definition.json
+
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }} # Referenced from GitHub Secrets
-          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }} # Referenced from GitHub Secrets
-          use_existing_version_if_available: true
-          application_name: spring-petclinic-metrics-eb-app # Already set externally in the observability-demo repo
-          environment_name: spring-petclinic-metrics-eb-env # Already set externally in the observability-demo repo
-          version_label: ${{github.SHA}}
-          region: us-east-1
-          deployment_package: spring-petclinic-2.6.0.jar # JAR file which was generated in the build step and zipped up
+          task-definition: task-definition.json
+          container-name: application  # edit me
+          image: ${{ steps.build-image.outputs.image }}
+
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: "ecs-service"
+          cluster: "ecs-cluster"
+          wait-for-service-stability: true
