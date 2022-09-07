@@ -30,7 +30,6 @@ jobs:
           path: build/libs/spring-petclinic-*.jar
       - name: "Run unit tests"
         run: echo "Running unit tests"
-     path: build/libs/spring-petclinic-*.jar
   cd:
     name: "Deployment"
     runs-on: "ubuntu-latest"
