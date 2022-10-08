@@ -1,5 +1,5 @@
 #!/bin/bash
 set -xe
 
-# Start Tomcat, the application server.
-service tomcat start
+# Start the executable JAR
+java -jar /usr/local/spring-petclinic-metrics.jar

@@ -1,8 +1,6 @@
 #!/bin/bash
 set -x
 
-# System control will return either "active" or "inactive".
-tomcat_running=$(systemctl is-active tomcat)
-if [ "$tomcat_running" == "active" ]; then
-    service tomcat stop
-fi
+# Kill the running JAR file
+app_id=$(ps -ef | grep 'spring-petclinic-metrics.jar' | grep -v 'grep' | awk '{ printf $2 }')
+sudo kill $app_id

@@ -1,10 +1,5 @@
 #!/bin/bash
 set -xe
 
-
-# Copy war file from S3 bucket to tomcat webapp folder
-aws s3 cp s3://##s3-bucket##/SpringBootHelloWorldExampleApplication.war /usr/local/tomcat9/webapps/SpringBootHelloWorldExampleApplication.war
-
-
-# Ensure the ownership permissions are correct.
-chown -R tomcat:tomcat /usr/local/tomcat9/webapps
+# Copy JAR file from S3 bucket to EC2 instance
+aws s3 cp s3://terraform-20221008192838363800000002/spring-petclinic-2.6.0.jar /usr/local/spring-petclinic-metrics.jar
