@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 env:
   AWS_REGION: us-east-1
-  S3BUCKET: terraform-20221008192838363800000002
+  S3BUCKET: terraform-20221009151650560700000002
 
 jobs:
   build:
