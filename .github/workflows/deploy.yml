@@ -1,10 +1,10 @@
 name: Build and Deploy
 
-on: [push, pull_request]
+workflow_dispatch: {}
 
 env:
   AWS_REGION: us-east-1
-  S3BUCKET: terraform-20221009165540466200000002
+  S3BUCKET: observability-demo-webappdeploymentbucket-1ag94nugleton
 
 jobs:
   build:
