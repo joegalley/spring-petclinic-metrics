@@ -2,7 +2,7 @@ name: Build and Deploy
 
 on:
   workflow_dispatch: {}
-  
+
 env:
   AWS_REGION: us-east-1
   S3BUCKET: observability-demo-webappdeploymentbucket-1ag94nugleton
@@ -68,4 +68,4 @@ jobs:
     - run: |
         echo "Deploying branch ${{ env.GITHUB_REF }} to ${{ github.event.inputs.environment }}"
         commit_hash=`git rev-parse HEAD`
-        aws deploy create-deployment --application-name CodeDeployAppNameWithASG --deployment-group-name CodeDeployGroupName --github-location repository=$GITHUB_REPOSITORY,commitId=$commit_hash --ignore-application-stop-failures
+        aws deploy create-deployment --application-name ObservabilityDemo --deployment-group-name CodeDeployGroupName --github-location repository=$GITHUB_REPOSITORY,commitId=$commit_hash --ignore-application-stop-failures
