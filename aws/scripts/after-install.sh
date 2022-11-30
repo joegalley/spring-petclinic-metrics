@@ -1,5 +1,10 @@
 #!/bin/bash
 set -xe
 
-# Copy JAR file from S3 bucket to EC2 instance
-aws s3 cp s3://observability-demo-webappdeploymentbucket-1ag94nugleton/spring-petclinic-2.6.0.jar /usr/local/spring-petclinic-metrics.jar
+
+# Copy war file from S3 bucket to tomcat webapp folder
+aws s3 cp s3://codedeploystack-webappdeploymentbucket-txq68ilhai81/spring-petclinic-2.7.3.war /usr/local/tomcat9/webapps/SpringBootHelloWorldExampleApplication.war
+
+
+# Ensure the ownership permissions are correct.
+chown -R tomcat:tomcat /usr/local/tomcat9/webapps
