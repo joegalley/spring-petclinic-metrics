@@ -5,12 +5,12 @@ on:
 
 env:
   AWS_REGION: us-east-1
-  S3BUCKET: observability-demo-webappdeploymentbucket-1ag94nugleton
+  S3BUCKET: codedeploystack-webappdeploymentbucket-14bvioie93k8i
 
 jobs:
   build:
     name: "Build and Package"
-    runs-on: "ubuntu-latest"
+    runs-on: ubuntu-20.04
 
     permissions:
       id-token: write
@@ -29,23 +29,19 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v1
         with:
-          java-version: '11'
+          java-version: 11
 
-      - name: Lint code
-        run: echo "Linting repository"
+      - name: chmod
+        run: chmod -R +x ./.github
 
-      - name: Upgrade Gradle permissions
-        run: chmod +x ./gradlew
+      - name: Build and Package Maven
+        id: package
+        working-directory: ${{ env.applicationfolder }}
+        run: $GITHUB_WORKSPACE/.github/scripts/build.sh
 
-      - name: "Run unit tests"
-        run: echo "Running unit tests"
-
-      - name: Build JAR file
-        run: ./gradlew bootJar
-
-      - name: Upload JAR to S3
-        working-directory: build/libs
-        run: aws s3 cp *.jar s3://${{ env.S3BUCKET }}/
+      - name: Upload Artifact to s3
+        working-directory: ${{ env.applicationfolder }}/target
+        run: aws s3 cp *.war s3://${{ env.S3BUCKET }}/
         
   deploy:
     needs: build
