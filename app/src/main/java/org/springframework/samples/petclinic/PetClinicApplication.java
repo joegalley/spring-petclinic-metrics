@@ -16,20 +16,19 @@
 
 package org.springframework.samples.petclinic;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.*;
+import org.springframework.boot.autoconfigure.*;
+import org.springframework.boot.web.servlet.support.*;
 
 /**
  * PetClinic Spring Boot Application.
  *
  * @author Dave Syer
- *
  */
 @SpringBootApplication
-public class PetClinicApplication {
+public class PetClinicApplication extends SpringBootServletInitializer {
 
-	public static void main(String[] args) {
-		SpringApplication.run(PetClinicApplication.class, args);
-	}
-
+    public static void main(String[] args) {
+        SpringApplication.run(PetClinicApplication.class, args);
+    }
 }
