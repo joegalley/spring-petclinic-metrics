@@ -1,4 +1,4 @@
-# spring-petclinic-metrics [![Build Status](https://github.com/spring-projects/spring-petclinic/actions/workflows/
+# spring-petclinic-metrics [![Build Status](https://github.com/joegalley/spring-petclinic-metrics/actions/workflows/deploy.yml/badge.svg)](https://github.com/joegalley/spring-petclinic-metrics/actions/workflows/deploy.yml)
 
 # Common Errors
 
